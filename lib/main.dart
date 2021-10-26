@@ -72,13 +72,92 @@ void main() {
     routes: {
       // When we navigate to the "/" route, build the FirstScreen Widget
       // "/" Route로 이동하면, FirstScreen 위젯을 생성합니다.
-      '/': (context) => FirstScreen(),
+      '/': (context) => MainScreen(),
+      '/first': (context) => FirstScreen(),
       // "/second" route로 이동하면, SecondScreen 위젯을 생성합니다.
       '/second': (context) => SecondScreen(),
       '/third': (context) => ThirdScreen(),
     },
   ));
 }
+class MainScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "RODY",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 30,
+              color: Colors.purple,
+            ),
+          ),
+          backgroundColor: Colors.yellow,
+        ),
+        body : Center(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
+                  child: Column(
+                    children: [
+                      Container(
+                          width: 500,
+                          height: 450,
+                          margin: const EdgeInsets.only(top: 15.0),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          child : Center(
+                            child: Text(
+                              "로디와 함께 이야기 만들기!",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30,
+                                color: Colors.purple,
+                              ),
+                            ),
+                          )
+                          // child: ClipRRect(
+                          //
+                          //     borderRadius: BorderRadius.circular(10),
+                          //     child:Image.network('http://ec2-3-37-243-73.ap-northeast-2.compute.amazonaws.com:8080/static/user_image/'+todos.img_src+'.png')
+                          // )
+                      ),
+                      Container(
+                        height: 500,
+                      ),
+                      Container(
+                          child: Row (
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Container(
+                                  child: RaisedButton(
+                                    child: Text('시작하기!',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      Navigator.pushNamed(context, '/first');
+                                    },
+                                  ),
+                                ),
+                              ]
+                          )
+                      ),
+                    ],
+                  )
+              ),
+            ],
+          ),
+        )
+    );
+  }
+}
+
 
 //이야기 생성 페이지 시작
 class FirstScreen extends StatelessWidget {
@@ -161,6 +240,9 @@ class FirstScreen extends StatelessWidget {
                         ),
                         controller: story_value,
                       ),
+                    ),
+                    Container( //임시로 만들어둔거 버튼 맨 아래로 보내기 위해..
+                      height: 500,
                     ),
                     Container(
                       child: Row (
