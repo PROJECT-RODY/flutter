@@ -39,8 +39,8 @@ image_postRequest(user_description1, user_description2, user_description3) async
   return utf8.decode(response.bodyBytes).replaceAll('\\','');
 }
 
-pdf_postRequest(file_name) async {
-  String url = 'http://ec2-3-37-243-73.ap-northeast-2.compute.amazonaws.com:8080/create_image';
+pdf_postRequest(user_title, user_story, user_image, user_email) async {
+  String url = 'http://ec2-3-37-243-73.ap-northeast-2.compute.amazonaws.com:8080/create_result';
 
   http.Response response = await http.post(
     url,
@@ -48,7 +48,10 @@ pdf_postRequest(file_name) async {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: <String, String> {
-      'situation_field_1': file_name
+      'user_title': user_title,
+      'user_story': user_story,
+      'user_image': user_image,
+      'user_email': user_email,
     },
   );
   return utf8.decode(response.bodyBytes).replaceAll('\\','');
@@ -133,11 +136,15 @@ class MainScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 Container(
-                                  child: RaisedButton(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.yellowAccent, // background
+                                      onPrimary: Colors.purple, // foreground
+                                    ),
                                     child: Text('시작하기!',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 30,
+                                        fontSize: 20,
                                       ),
                                     ),
                                     onPressed: () async {
@@ -196,6 +203,7 @@ class FirstScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
+                      width: 600,
                       margin: EdgeInsets.all(40.0),
                       child : TextField(
                         decoration: InputDecoration(
@@ -218,7 +226,7 @@ class FirstScreen extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: 400,
+                      width: 600,
                       height: 300,
                       child : TextField(
                         maxLines: null,
@@ -250,7 +258,11 @@ class FirstScreen extends StatelessWidget {
                           children: <Widget>[
 
                             Container(
-                              child: RaisedButton(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.yellowAccent, // background
+                                  onPrimary: Colors.purple, // foreground
+                                ),
                                 child: Text('이야기 생성!'),
                                 onPressed: () async {
                                   result = await _postRequest(title_value.text, story_value.text, counter);
@@ -262,7 +274,11 @@ class FirstScreen extends StatelessWidget {
                               ),
                             ),
                             Container(
-                              child: RaisedButton(
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.yellowAccent, // background
+                                  onPrimary: Colors.purple, // foreground
+                                ),
                                 onPressed: () {
                                   // 현재 route를 스택에서 제거함으로써 첫 번째 스크린으로 되돌아 갑니다.
                                   Navigator.pushNamed(context, '/second', arguments:todos);
@@ -388,7 +404,11 @@ class SecondScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
                                 Container(
-                                  child: RaisedButton(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.yellowAccent, // background
+                                      onPrimary: Colors.purple, // foreground
+                                    ),
                                     child: Text('이미지 생성!'),
                                     onPressed: () async {
                                       result = await image_postRequest(description1_value.text, description1_value.text, description3_value.text);
@@ -420,6 +440,7 @@ class ThirdScreen extends StatelessWidget {
     var result;
     final title_value = TextEditingController();
     final story_value = TextEditingController();
+    final email_value = TextEditingController();
     title_value.text = todos.title;
     story_value.text = todos.story;
 
@@ -442,50 +463,81 @@ class ThirdScreen extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 10.0),
                   child: Column(
                     children: [
-                      Container(
-                          width: 200,
-                          height: 200,
-                          margin: const EdgeInsets.only(top: 15.0),
+                      RepaintBoundary(
+                        child: Column(
+                          children: [
+                            Container(
+                                width: 200,
+                                height: 200,
+                                margin: const EdgeInsets.only(top: 15.0),
 
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10)
-                          ),
-                          child: ClipRRect(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: ClipRRect(
 
-                              borderRadius: BorderRadius.circular(10),
-                              child:Image.network('http://ec2-3-37-243-73.ap-northeast-2.compute.amazonaws.com:8080/static/user_image/'+todos.img_src+'.png')
-                          )
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(20.0),
-                        child : TextField(
-                          decoration: InputDecoration(
-                            labelText: '제목',
-                            hintText: '제목을 입력 하세요',
-                            labelStyle: TextStyle(color: Colors.black54),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(width: 1, color: Colors.black54),
+                                    borderRadius: BorderRadius.circular(10),
+                                    child:Image.network('http://ec2-3-37-243-73.ap-northeast-2.compute.amazonaws.com:8080/static/user_image/'+todos.img_src+'.png')
+                                )
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide(width: 1, color: Colors.black54),
+                            Container(
+                              width: 600,
+                              margin: EdgeInsets.all(20.0),
+                              child : TextField(
+                                decoration: InputDecoration(
+                                  labelText: '제목',
+                                  hintText: '제목을 입력 하세요',
+                                  labelStyle: TextStyle(color: Colors.black54),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(width: 1, color: Colors.black54),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(width: 1, color: Colors.black54),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                ),
+                                controller: title_value,
+                              ),
                             ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                            Container(
+                              width: 600,
+                              height: 200,
+                              child : TextField(
+                                maxLines: null,
+                                decoration: InputDecoration(
+                                  labelText: '이야기',
+                                  hintText: '이야기를 입력하세요.',
+                                  labelStyle: TextStyle(color: Colors.blueAccent),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(width: 1, color: Colors.blueAccent),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                    borderSide: BorderSide(width: 1, color: Colors.blueAccent),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                                  ),
+                                ),
+                                controller: story_value,
+                              ),
                             ),
-                          ),
-                          controller: title_value,
+                          ],
                         ),
                       ),
                       Container(
-                        width: 400,
+                        width: 600,
                         height: 200,
                         child : TextField(
                           maxLines: null,
                           decoration: InputDecoration(
-                            labelText: '이야기',
-                            hintText: '이야기를 입력하세요.',
+                            labelText: '이메일',
+                            hintText: '이메일 주소를 입력하세요.',
                             labelStyle: TextStyle(color: Colors.blueAccent),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -499,22 +551,26 @@ class ThirdScreen extends StatelessWidget {
                               borderRadius: BorderRadius.all(Radius.circular(10.0)),
                             ),
                           ),
-                          controller: story_value,
+                          controller: email_value,
                         ),
                       ),
+
                       Container(
                           child: Row (
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
 
                                 Container(
-                                  child: RaisedButton(
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.yellowAccent, // background
+                                      onPrimary: Colors.purple, // foreground
+                                    ),
                                     child: Text('PDF 발송!'),
                                     onPressed: () async {
-                                      result = await _postRequest(title_value.text, story_value.text, '');
-                                      todos = Todo(title_value.text, result.toString().substring(1, result.lastIndexOf('"')), '');
+                                      result = await pdf_postRequest(todos.title, todos.story, todos.img_src, email_value.text);
                                       // Named route를 사용하여 두 번째 화면으로 전환합니다.
-                                      story_value.text = todos.story;
+                                      email_value.text = result.toString();
                                     },
                                   ),
                                 ),
