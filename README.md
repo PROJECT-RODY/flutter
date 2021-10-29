@@ -1,16 +1,12 @@
-# rody
-
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### 사용자의 입력을 서버로 보내며 서버에서 처리한 결과를 화면으로 표시는 app
+>
+> app자체적으로 처리하는 데이터는 없다고 생각해도 된다.
+> 
+> app은 단순히 사용자의 요청을 처리하고 결과를 보여주는 역할만한다.
+> 
+> web와 함께 추후 개선사항으로는 로그인, 게시물 작성, 좋아요, 댓글 등의 기능이 있다.
+> 
+> 현재 작성된 dart코드는 스마트폰보다 테블릿에 적절하게 구현 되었다.
+> 
+> 이후 크기를 절대값으로 지정하는 것이아닌 적응형으로 개선해야한다.
+> 
